@@ -1,0 +1,31 @@
+version: "3"
+
+networks:
+  monitoring:
+
+
+services:
+  promtail:
+    image: grafana/promtail:2.6.1
+    volumes:
+      - /var/log:/var/log
+      - ./promtail.yml:/etc/promtail/config.yml
+      # - /var/lib/docker/containers:/var/lib/docker/containers
+      - ./data:/logs/
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - monitoring
+  
+  # Log generator
+  # Generate logs and split log files every 1000MB in "/logs/*.log" path with "json" format
+  # $ flog -t log -f json -o /logs/*.log -p 1000000000
+  flog:
+    image: nityag123/flog:latest
+    # Output fake log in JSON format
+    command: [ "--format=json_with_trace", "--delay=0.01", "--type=log", "--output=/logs/my.log", "-k", "1500", "-p", "500000000", "--bytes=3000000000"]
+    volumes:
+      - ./data:/logs/
+    networks:
+      - monitoring
+    stop_signal: SIGKILL
+
