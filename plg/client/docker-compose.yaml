@@ -22,7 +22,7 @@ services:
   flog:
     image: nityag123/flog:latest
     # Output fake log in JSON format
-    command: [ "--format=json_with_trace", "--delay=0.01", "--type=log", "--output=/logs/my.log", "-k", "1500", "-p", "500000000", "--bytes=3000000000"]
+    command: [ "--format=json_with_trace", "--type=log", "--output=/logs/my.log", "-k", "1500", "-p", "500000000", "--bytes=40000000000"]
     volumes:
       - ./data:/logs/
     networks:
