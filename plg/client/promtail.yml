@@ -7,9 +7,27 @@ positions:
 
 clients:
   - url: http://172.31.27.188:3100/loki/api/v1/push
+  - batchsize: 1048576 # default value 1048576
+  - timeout: 10s # default value 10s
+
+
+limits_config:
+  # When true, enforces rate limiting on this instance of Promtail.
+  readline_rate_enabled: true # default value is false
+
+  # The rate limit in log lines per second that this instance of Promtail may push to Loki.
+  readline_rate: 100000 # default value  10000
+
+  # The cap in the quantity of burst lines that this instance of Promtail may push
+  # to Loki.
+  readline_burst: 100000 # default value 10000
+
+  # When true, exceeding the rate limit causes this instance of Promtail to discard
+  # log lines, rather than sending them to Loki. When false, exceeding the rate limit
+  # causes this instance of Promtail to temporarily hold off on sending the log lines and retry later.
+  readline_rate_drop: true # default value true
 
 scrape_configs:
-
 # flog logs
 - job_name: flog-logs
 
@@ -35,46 +53,4 @@ scrape_configs:
       ## loki doesn't recommend using high cardinality values in labels as the max streams limits is reached.
       # referer: 
 
-# Docker container logs
-# - job_name: containers
-#   static_configs:
-#   - targets:
-#       - localhost
-#     labels:
-#       job: containerlogs
-#       __path__: /var/lib/docker/containers/*/*log
 
-#   pipeline_stages:
-#   - json:
-#       expressions:
-#         output: log
-#         stream: stream
-#         attrs:
-#   - json:
-#       expressions:
-#         tag:
-#       source: attrs
-#   - regex:
-#       expression: (?P<image_name>(?:[^|]*[^|])).(?P<container_name>(?:[^|]*[^|])).(?P<image_id>(?:[^|]*[^|])).(?P<container_id>(?:[^|]*[^|]))
-#       source: tag
-#   - timestamp:
-#       format: RFC3339Nano
-#       source: time
-#   - labels:
-#       tag:
-#       stream:
-#       image_name:
-#       container_name:
-#       image_id:
-#       container_id:
-#   - output:
-#       source: output
-
-# system logs
-# - job_name: system
-#   static_configs:
-#   - targets:
-#       - localhost
-#     labels:
-#       job: varlogs
-#       __path__: /var/log/*log
