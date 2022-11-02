@@ -6,6 +6,7 @@ It contains the deployment of grafana and loki which will accept data from promt
 * docker-compose up -d
 * Add the prometheus datasource in the grafana UI
 * import hostmeterics dashboard with id : 1860
+    In cpu graph for cpu change stack series to never.
 * import loki dashboard : 14055
 
 
