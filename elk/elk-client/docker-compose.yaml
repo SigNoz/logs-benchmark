@@ -23,16 +23,13 @@ services:
   # $ flog -t log -f json -o /logs/*.log -p 1000000000
   flog:
     image: nityag123/flog:latest
-    # Output fake log in JSON format
-    command: [ "--format=json_with_trace", "-k", "1500", "--bytes=50000000000"]
-    networks:
-      - elk
+    # Output fake log in JSON format with traces
+    command: [ "--format=json_with_trace", "-k", "1500", "--bytes=500000000"]
     stop_signal: SIGKILL
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://172.31.27.188:2256"
-        # tag: "{{.Name}}/{{.ID}}"
+        syslog-address: "tcp://localhost:2256"
     depends_on:
       - logstash
 
