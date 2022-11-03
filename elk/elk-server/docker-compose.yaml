@@ -1,7 +1,6 @@
 version: '3.7'
 
 services:
-
   # The 'setup' service runs a one-off script which initializes the
   # 'logstash_internal' and 'kibana_system' users inside Elasticsearch with the
   # values of the passwords defined in the '.env' file.
@@ -27,14 +26,10 @@ services:
       - elasticsearch
 
   elasticsearch:
-    # build:
-    #   context: elasticsearch/
-    #   args:
-    #     ELASTIC_VERSION: ${ELASTIC_VERSION}
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
     volumes:
       - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
-      - elasticsearch:/usr/share/elasticsearch/data:z
+      - es:/usr/share/elasticsearch/data:z
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -64,6 +59,53 @@ services:
       - elk
     depends_on:
       - elasticsearch
+  
+  eexporter:
+    image: quay.io/prometheuscommunity/elasticsearch-exporter:latest
+    command:
+      - '--es.uri=http://elasticsearch:9200'
+    restart: always
+    ports:
+      - "127.0.0.1:9114:9114"
+    networks:
+      - elk
+  
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+        - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+        - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+        - '9090:9090'
+    networks:
+      - elk
+  
+  node-exporter:
+    image: prom/node-exporter:latest
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    expose:
+      - 9100
+    networks:
+      - elk
+  
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - elk-grafana-storage:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - elk
 
 networks:
   elk:
@@ -71,4 +113,6 @@ networks:
 
 volumes:
   setup:
-  elasticsearch:
+  es:
+  elk-grafana-storage:
+  metricbeat-data01:
