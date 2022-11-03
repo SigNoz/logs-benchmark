@@ -24,7 +24,7 @@ services:
   flog:
     image: nityag123/flog:latest
     # Output fake log in JSON format
-    command: [ "--format=json_with_trace", "-k", "1500", "--bytes=100000000"]
+    command: [ "--format=json_with_trace", "-k", "1500", "--bytes=50000000000"]
     networks:
       - elk
     stop_signal: SIGKILL
