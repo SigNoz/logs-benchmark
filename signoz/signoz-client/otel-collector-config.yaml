@@ -1,0 +1,58 @@
+receivers:
+  tcplog:
+    listen_address: "0.0.0.0:2255"
+    attributes: {}
+    resource:
+      host: "mys"
+    add_attributes: false
+    operators:
+      - type: regex_parser
+        regex: '^.*(?P<body>{.*})'
+        output: parsedata
+      - type: json_parser
+        id: parsedata
+        parse_from: attributes.body
+      - type: move
+        from: attributes["body"]
+        to: body
+      - type: time_parser
+        parse_from: attributes.datetime
+        layout_type: strptime
+        layout: '%d/%b/%Y:%H:%M:%S %z'
+
+processors:
+  batch:
+    send_batch_size: 30000
+    send_batch_max_size: 31000
+    timeout: 10s
+    
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+  zpages:
+    endpoint: 0.0.0.0:55679
+  pprof:
+    endpoint: 0.0.0.0:1777
+
+exporters:
+  logging: {}
+  otlp/signoz:
+    endpoint: 172.31.27.188:4317
+    tls:
+      insecure: true
+
+service:
+  telemetry:
+    metrics:
+      address: 0.0.0.0:8888
+    logs:
+      level: "debug"
+  extensions:
+    - health_check
+    - zpages
+    - pprof
+  pipelines:
+    logs:
+      receivers: [tcplog]
+      processors: [batch]
+      exporters: [otlp/signoz]

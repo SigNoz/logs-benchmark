@@ -1,0 +1,51 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        max_recv_msg_size_mib: 300
+        endpoint: 0.0.0.0:4417
+      http:
+        endpoint: 0.0.0.0:4418
+
+processors:
+  batch:
+    send_batch_size: 30000
+    timeout: 10s
+
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+  zpages:
+    endpoint: 0.0.0.0:55679
+  pprof:
+    endpoint: 0.0.0.0:1777
+
+exporters:
+  logging: {}
+
+  clickhouselogsexporter:
+    dsn: tcp://clickhouse:9000/
+    timeout: 10s
+    sending_queue:
+      queue_size: 20
+    retry_on_failure:
+      enabled: true
+      initial_interval: 5s
+      max_interval: 30s
+      max_elapsed_time: 300s
+
+service:
+  telemetry:
+    metrics:
+      address: 0.0.0.0:8888
+    logs:
+      level: "debug"
+  extensions:
+    - health_check
+    - zpages
+    - pprof
+  pipelines:
+    logs:
+      receivers:  [otlp]
+      processors: [batch]
+      exporters: [clickhouselogsexporter]
