@@ -13,12 +13,14 @@ receivers:
         id: parsedata
         parse_from: attributes.body
       - type: move
-        from: attributes["body"]
+        from: attributes["dummyBytes"]
         to: body
       - type: time_parser
         parse_from: attributes.datetime
         layout_type: strptime
         layout: '%d/%b/%Y:%H:%M:%S %z'
+      - type: remove
+        field: attributes.body
 
 processors:
   batch:

@@ -10,7 +10,7 @@ receivers:
 
 processors:
   batch:
-    send_batch_size: 30000
+    send_batch_size: 100000
     timeout: 10s
 
 extensions:
