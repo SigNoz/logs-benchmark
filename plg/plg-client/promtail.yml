@@ -7,8 +7,8 @@ positions:
 
 clients:
   - url: http://172.31.27.188:3100/loki/api/v1/push
-  - batchsize: 1048576 # default value 1048576
-  - timeout: 10s # default value 10s
+  # - batchsize: 1048576 # default value 1048576
+  # - timeout: 10s # default value 10s
 
 
 limits_config:
@@ -46,10 +46,12 @@ scrape_configs:
             expressions:
               protocol:
               method:
+              # status:
               # referer:
   - labels:
       protocol:
       method:
+      # status: # resulted in max strems limit error
       ## loki doesn't recommend using high cardinality values in labels as the max streams limits is reached.
       # referer: 
 
