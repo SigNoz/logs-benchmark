@@ -15,10 +15,22 @@ services:
   # Log generator
   # Generate logs and split log files every 1000MB in "/logs/*.log" path with "json" format
   # $ flog -t log -f json -o /logs/*.log -p 1000000000
-  flog:
+  flog-0:
     image: nityag123/flog:latest
     # Output fake log in JSON format with traces
-    command: [ "--format=json_with_trace", "-k", "1500", "--bytes=500000000"]
+    command: [ "--format=json_with_trace", "-k", "1500", "--bytes=25000000000"]
+    stop_signal: SIGKILL
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:2255"
+    depends_on:
+      - otel-collector
+  
+  flog-1:
+    image: nityag123/flog:latest
+    # Output fake log in JSON format with traces
+    command: [ "--format=json_with_trace", "-k", "1500", "--bytes=25000000000"]
     stop_signal: SIGKILL
     logging:
       driver: syslog
