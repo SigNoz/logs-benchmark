@@ -24,7 +24,7 @@ services:
   flog-0:
     image: nityag123/flog:latest
     # Output fake log in JSON format with traces
-    command: [ "--format=json_with_trace", "-k", "1500", "--bytes=25000000000"]
+    command: [ "--format=json_with_trace", "-k", "1500", "--bytes=83400000000"]
     stop_signal: SIGKILL
     logging:
       driver: syslog
@@ -36,7 +36,7 @@ services:
   flog-1:
     image: nityag123/flog:latest
     # Output fake log in JSON format with traces
-    command: [ "--format=json_with_trace", "-k", "1500", "--bytes=25000000000"]
+    command: [ "--format=json_with_trace", "-k", "1500", "--bytes=83400000000"]
     stop_signal: SIGKILL
     logging:
       driver: syslog

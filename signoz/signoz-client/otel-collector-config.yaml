@@ -19,8 +19,22 @@ receivers:
         parse_from: attributes.datetime
         layout_type: strptime
         layout: '%d/%b/%Y:%H:%M:%S %z'
+      - type: trace_parser
+        trace_id:
+          parse_from: attributes.traceId
+        span_id:
+          parse_from: attributes.spanId
       - type: remove
         field: attributes.body
+      - type: remove
+        field: attributes.datetime
+      - type: remove
+        field: attributes.traceId
+      - type: remove
+        field: attributes.spanId
+      - type: move
+        from: attributes.user-identifier
+        to: attributes.user_identifier
 
 processors:
   batch:
