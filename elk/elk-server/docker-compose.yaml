@@ -61,7 +61,7 @@ services:
       - elasticsearch
   
   eexporter:
-    image: quay.io/prometheuscommunity/elasticsearch-exporter:latest
+    image: quay.io/prometheuscommunity/elasticsearch-exporter:v1.5.0
     command:
       - '--es.uri=http://elasticsearch:9200'
     restart: always
@@ -71,7 +71,7 @@ services:
       - elk
   
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v2.37.1
     volumes:
         - ./prometheus.yml:/etc/prometheus/prometheus.yml
         - elk_prometheus_data:/prometheus
@@ -83,7 +83,7 @@ services:
       - elk
   
   node-exporter:
-    image: prom/node-exporter:latest
+    image: prom/node-exporter:v1.4.0
     restart: unless-stopped
     volumes:
       - /proc:/host/proc:ro
@@ -100,7 +100,7 @@ services:
       - elk
   
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:9.2.1
     volumes:
       - elk-grafana-storage:/var/lib/grafana
     ports:

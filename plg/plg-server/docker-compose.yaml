@@ -6,7 +6,7 @@ networks:
 
 services:
   node-exporter:
-    image: prom/node-exporter:latest
+    image: prom/node-exporter:v1.4.0
     restart: unless-stopped
     volumes:
       - /proc:/host/proc:ro
@@ -22,7 +22,7 @@ services:
     networks:
       - monitoring
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v2.37.1
     restart: unless-stopped
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
@@ -50,7 +50,7 @@ services:
       - monitoring
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:9.2.1
     volumes:
       - grafana-storage:/var/lib/grafana
     ports:
