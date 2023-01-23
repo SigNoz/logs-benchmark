@@ -33,3 +33,5 @@ Storage is costly and logs data is often huge. Log management tools need to be e
 * Grafana: 9.2.1
 * Signoz-otel-collector: 0.55.3
 * Clickhouse-server: 22.4.5
+
+Note: We saw Loki team has [recently shared](https://twitter.com/sukhanisandeep/status/1615243908241588224) some improvements in querying speed, but this benchmark is not updated based on this update and we have not verified if it would help in high cardinality data. If anyone in the community has been able to get good performance for high cardinality data, we would love to learn more.
