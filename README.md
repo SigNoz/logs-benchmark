@@ -10,22 +10,22 @@ The results of the benchmark are published here [benchmark](https://signoz.io/bl
 ### Benchmark Key Findings: A summary
 For any log management tool to be efficient, the following three factors are very important.
 
-Ingestion
+#### Ingestion
 Distributed cloud-native applications can generate logs at a humungous scale. Log management tools should be efficient at ingesting log data at scale.
 
-Query
+#### Query
 Logs help in troubleshooting, and troubleshooting should be fast. The end-user experience depends on how fast a user can query relevant logs.
 
-Storage
+#### Storage
 Storage is costly and logs data is often huge. Log management tools need to be efficient in storing logs.
 
-Findings
-For ingestion, we found SigNoz to be 2.5x faster than ELK and consumed 50% less resources.
-For querying benchmarks, we tested out different types of commonly used queries. While ELK was better at performing queries like COUNT, SigNoz is 13x faster than ELK for aggregate queries.
-Storage used by SigNoz for the same amount of logs is about half of what ELK uses.
-Loki doesn’t perform well if you want to index and query high cardinality data. In our setup for Loki we were not able to push it to ingest high cardinality labels/indexes.
+#### Findings
+- For ingestion, we found SigNoz to be 2.5x faster than ELK and consumed 50% less resources.
+- For querying benchmarks, we tested out different types of commonly used queries. While ELK was better at performing queries like COUNT, SigNoz is 13x faster than ELK for aggregate queries.
+- Storage used by SigNoz for the same amount of logs is about half of what ELK uses.
+- Loki doesn’t perform well if you want to index and query high cardinality data. In our setup for Loki we were not able to push it to ingest high cardinality labels/indexes.
 
-## Version Info :
+### Version Info :
 * Logstash: 8.4.3
 * Elasticsearch: 8.4.3
 * Promtail:2.6.1
